@@ -1,42 +1,25 @@
 package main
 
 import (
-	"bufio"
-	"fmt"
-	"os"
+    "fmt"
 )
 
 func main() {
-	game := NewGame() // Initialize a new chess game
-	scanner := bufio.NewScanner(os.Stdin)
+    game := NewGame() // Create a new game
+    game.PrintBoard() // Print the initial state of the board
 
-	fmt.Println("Welcome to Canary Chess")
-	fmt.Println("Written by Hawk0120")
+    // Example loop for making moves
+    for {
+        fmt.Print("Enter your move (or 'suggest' to get a suggestion): ")
+        var input string
+        fmt.Scanln(&input)
 
-	game.PrintBoard()
-
-	for {
-		fmt.Print("Enter your move (e.g., 'e2e4') or 'suggest' for a suggested move: ")
-		scanner.Scan()
-		input := scanner.Text()
-
-		if input == "suggest" {
-			suggestedMove := game.SuggestMove()
-			fmt.Printf("Suggested move: %s\n", suggestedMove)
-			continue
-		}
-
-		if input == "quit" {
-			fmt.Println("Thanks for playing!")
-			break
-		}
-
-		if game.MakeMove(input) {
-			fmt.Println("Move played:", input)
-			game.PrintBoard()
-		} else {
-			fmt.Println("Invalid move. Please try again.")
-		}
-	}
+        if input == "suggest" {
+            game.SuggestMove() // Get a suggestion from LLaMA
+        } else {
+            game.MakeMove(input) // Make the player's move
+            game.PrintBoard()    // Print the updated board
+        }
+    }
 }
 
